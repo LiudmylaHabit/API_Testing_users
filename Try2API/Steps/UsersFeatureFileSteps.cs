@@ -159,7 +159,8 @@ namespace ApiPractice.Steps
             string companyName = "Ferrero " + companyType;
             List<string> companyUsers = new List<string>
             {
-                "first@test.ru"
+                "first@test.ru",
+                "mary@hellowin.usa"
             };
             companyDetails.Add("company_name", companyName);
             companyDetails.Add("company_type", companyType.Trim(new char[] { '"' }));
@@ -188,7 +189,11 @@ namespace ApiPractice.Steps
             JObject json = JObject.Parse(temp);
             var companyList = json.Children().ToArray();
             string companyName = json["company"]["name"].ToString();
+            string firstEmployee = json["company"]["users"][0].ToString();
+            string secondEmployee = json["company"]["users"][1].ToString();
             Assert.AreEqual("Ferrero " + companyType, companyName);
+            Assert.AreEqual("first@test.ru", firstEmployee);
+            Assert.AreEqual("mary@hellowin.usa", secondEmployee);
         }
                 
         // Creating task for user
