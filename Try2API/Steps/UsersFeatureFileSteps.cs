@@ -6,7 +6,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using TechTalk.SpecFlow;
-using static Io.Cucumber.Messages.GherkinDocument.Types.Feature.Types;
 
 namespace ApiPractice.Steps
 {
@@ -75,9 +74,8 @@ namespace ApiPractice.Steps
         }
 
         // Scenario that chacking impossibility to create account with existing email
-
-        [Given(@"Data with existing email for registretion is ready")]
-        public void GivenDataWithExistingEmailForRegistretionIsReady()
+        [Given(@"Data with existing email for registration is ready")]
+        public void GivenDataWithExistingEmailForRegistrationIsReady()
         {
             string email = "zx@z.x";
             string name = "	user";
@@ -96,13 +94,7 @@ namespace ApiPractice.Steps
             request.AddJsonBody(userData);
             response = client.Execute(request);
         }
-        /*
-        [Then(@"Server status response OK")]
-        public void ThenServerStatusResponseOK()
-        {
-            Assert.AreEqual("OK", response.StatusCode.ToString());
-        }*/
-
+       
         [Then(@"Server response type is error")]
         public void ThenServerResponseTypeIsError()
         {
@@ -121,10 +113,9 @@ namespace ApiPractice.Steps
         }
 
         // Scenario that chacking impossibility to create account with invalid email
-        [Given(@"Data with invalid email for registretion is ready")]
-        public void GivenDataWithInvalidEmailForRegistretionIsReady()
-        {
-            string email = "invalid";
+        [Given(@"Data with (.*) email for registretion is ready")]
+        public void GivenDataWithEmailForRegistretionIsReady(string email)
+        {          
             string name = "user";
             string pass = "123qwe";
             userData = new Dictionary<string, string>();
@@ -241,42 +232,7 @@ namespace ApiPractice.Steps
             JObject json = JObject.Parse(temp);
             createdTaskId = json["id_task"]?.ToString();
             Assert.AreEqual("Задача успешно создана!", json["message"]?.ToString());
-        }
-
-        [Then(@"Delete created task")]
-        public void ThenDeleteCreatedTask()
-        {
-            Dictionary<string, string> taskToDelete = new Dictionary<string, string>()
-                 {
-                     { "email_owner", "mary@hellowin.usa" },
-                     { "task_id", createdTaskId }
-                 };
-            request = new RestRequest("tasks/rest/deletetask ", Method.POST);
-            request.RequestFormat = DataFormat.Json;
-            request.AddJsonBody(taskToDelete);
-            response = client.Execute(request);
-            JObject json = JObject.Parse(response.Content);
-            createdTaskId = json["id_task"]?.ToString();
-        }
-
-
-        /*
-         public void CleanDatabase()
-         {
-             if (createdTaskId.Length > 0)
-             {
-                 Dictionary<string, string> taskToDelete = new Dictionary<string, string>()
-                 {
-                     { "email_owner", "mary@hellowin.usa" },
-                     { "task_id", createdTaskId }
-                 };
-                 request = new RestRequest("tasks/rest/deletetask ", Method.POST);
-                 request.RequestFormat = DataFormat.Json;
-                 request.AddJsonBody(userWithTask);
-                 response = client.Execute(request);
-                 createdTaskId = "";
-             }
-         }*/
+        }                    
 
         // Deleting user task
         [Given(@"User has task")]
@@ -322,5 +278,81 @@ namespace ApiPractice.Steps
             Assert.AreEqual($" Задача с ID {createdTaskId} успешно удалена", json["message"]?.ToString());
         }
 
+        // MagicSearchByEmail
+        [Given(@"Data of existing user for magic search is ready")]
+        public void GivenDataOfExistingUserForMagicSearchIsReady()
+        {
+            userData = new Dictionary<string, string>()
+            {
+                {"query", "mary@hellowin.usa" }
+            };            
+        }
+
+        [When(@"I send POST request with prepared user data")]
+        public void WhenISendPOSTRequestWithPreparedUserData()
+        {
+            request = new RestRequest("tasks/rest/magicsearch", Method.POST);
+            request.RequestFormat = DataFormat.Json;
+            request.AddJsonBody(userData);
+            response = client.Execute(request);
+        }
+
+        [Then(@"Server status response is (.*)")]
+        public void ThenServerStatusResponseIs(int code)
+        {
+            var temp = response.Content;
+            JObject json = JObject.Parse(temp);
+            string serverResponseCode = response.StatusCode.ToString();
+            Assert.AreEqual($"{code}", serverResponseCode);
+        }
+
+
+        [Then(@"Server response include email of user that we was looking for")]
+        public void ThenSwerverResponseIncludeEmailOfUserThatWeWasLookingFor()
+        {
+            var temp = response.Content;
+            JObject json = JObject.Parse(temp);
+            string responceEmail = json["results"][0]["email"]?.ToString();
+            Assert.AreEqual(userData["query"], responceEmail);
+        }
+
+        [Then(@"Server response include name of user that we was looking for")]
+        public void ThenServerResponseIncludeNameOfUserThatWeWasLookingFor()
+        {
+            var temp = response.Content;
+            JObject json = JObject.Parse(temp);
+            string responseName = json["results"][0]["name"]?.ToString();
+            Assert.AreEqual("bloodymery", responseName);
+        }
+
+        // Hooks 
+
+        [AfterScenario("successRegistration")]
+        public void DeleteCreatedUser()
+        {
+            Dictionary<string, string> userToDelete = new Dictionary<string, string>()
+            {
+                {"email", userData["email"] }
+            };
+            request = new RestRequest("tasks/rest/deleteuser ", Method.POST);
+            request.RequestFormat = DataFormat.Json;
+            request.AddJsonBody(userToDelete);
+            response = client.Execute(request);
+        }
+
+        [AfterScenario("createTask")]
+        public void DeleteUserTask()
+        {
+            Dictionary<string, string> taskToDelete = new Dictionary<string, string>()
+                 {
+                     { "email_owner", "mary@hellowin.usa" },
+                     { "task_id", createdTaskId.Trim() }
+                 };
+            request = new RestRequest("tasks/rest/deletetask ", Method.POST);
+            request.RequestFormat = DataFormat.Json;
+            request.AddJsonBody(taskToDelete);
+            response = client.Execute(request);
+            createdTaskId = "";
+        }
     }
 }

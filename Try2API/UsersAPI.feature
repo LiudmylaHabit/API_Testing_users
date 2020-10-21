@@ -16,7 +16,7 @@ Scenario: Register an account with unique email
 
 @negativeRegistration
 Scenario: Register an account with existing email
-	Given Data with existing email for registretion is ready
+	Given Data with existing email for registration is ready
 	When I send POST registration request with prepared data
 	Then Server status response is OK
 	Then Server response type is error
@@ -24,11 +24,17 @@ Scenario: Register an account with existing email
 
 @negativeRegistration
 Scenario: Register an account with invalid email
-	Given Data with invalid email for registretion is ready
+	Given Data with <invalid> email for registretion is ready
 	When I send POST registration request with prepared data
 	Then Server status response is OK
 	Then Server response type is error
 	Then Server response message is tjat input email is invalid exist
+	Examples:
+		| invalid   |
+		| "email"   |
+		| "email@   |
+		| "email."  |
+		| "email@." |
 
 @login
 Scenario: Login into an account with valid credentials
@@ -58,7 +64,6 @@ Scenario: Creating task for user
 	Then Server status response is OK
 	Then Server response type is success
 	Then Server response message inform that task was created 
-	Then Delete created task
 
 @tasks
 Scenario: Deleting user task 
@@ -68,3 +73,11 @@ Scenario: Deleting user task
 	Then Server status response is OK
 	Then Server response type is success
 	Then Server response message inform that task was deleted 
+
+@search
+Scenario: Search all information about one user by email
+	Given Data of existing user for magic search is ready
+	When I send POST request with prepared user data 
+	Then Server status response is 231
+	Then Server response include email of user that we was looking for
+	Then Server response include name of user that we was looking for
