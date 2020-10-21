@@ -202,7 +202,7 @@ namespace ApiPractice.Steps
             string companyName = json["company"]["name"].ToString();
             Assert.AreEqual("Ferrero " + companyType, companyName);
         }
-
+                
         // Creating task for user
         [Given(@"Data for creating task for user is ready")]
         public void GivenDataForCreatingTaskForUserIsReady()
@@ -326,7 +326,6 @@ namespace ApiPractice.Steps
         }
 
         // Hooks 
-
         [AfterScenario("successRegistration")]
         public void DeleteCreatedUser()
         {
