@@ -35,8 +35,25 @@ namespace Try2API
         public virtual void FeatureSetup()
         {
             testRunner = TechTalk.SpecFlow.TestRunnerManager.GetTestRunner();
-            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "", "UsersAPI", "\tIn order to create tasks \r\n\tAs a user\r\n\tI want to register account on users syst" +
-                    "em", ProgrammingLanguage.CSharp, ((string[])(null)));
+            TechTalk.SpecFlow.FeatureInfo featureInfo = new TechTalk.SpecFlow.FeatureInfo(new System.Globalization.CultureInfo("en-US"), "", "UsersAPI", @"	In order to create a company in users system
+	As a user
+	I want to register account on the website
+
+	In order to complete the assigned tasks
+	As a user
+	I want to be able to login into the system
+
+	To unite my employees
+	As a user
+	I want to create a company with employees
+
+	In order to organize work
+	As a user 
+	I want to be able to create tasks
+
+	In order to avoid duplicates and mistakes
+	As a user
+	I want to be able to delete tasks created by me", ProgrammingLanguage.CSharp, ((string[])(null)));
             testRunner.OnFeatureStart(featureInfo);
         }
         
@@ -76,9 +93,9 @@ namespace Try2API
         
         public virtual void FeatureBackground()
         {
-#line 6
+#line 22
 #line hidden
-#line 7
+#line 23
  testRunner.Given("REST-client for request is created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
         }
@@ -92,7 +109,7 @@ namespace Try2API
                     "successRegistration"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Register an account with unique email", null, tagsOfScenario, argumentsOfScenario);
-#line 10
+#line 26
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -112,22 +129,22 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 6
+#line 22
 this.FeatureBackground();
 #line hidden
-#line 11
+#line 27
  testRunner.Given("Data for registretion is ready", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 12
+#line 28
  testRunner.When("I send POST registration request with prepared data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 13
+#line 29
  testRunner.Then("Server status response is OK", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 14
+#line 30
  testRunner.Then("username from response is equel to username from request", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 15
+#line 31
  testRunner.Then("email from response is equel to email from request", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -143,7 +160,7 @@ this.FeatureBackground();
                     "negativeRegistration"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Register an account with existing email", null, tagsOfScenario, argumentsOfScenario);
-#line 18
+#line 34
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -163,22 +180,22 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 6
+#line 22
 this.FeatureBackground();
 #line hidden
-#line 19
+#line 35
  testRunner.Given("Data with existing email for registration is ready", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 20
+#line 36
  testRunner.When("I send POST registration request with prepared data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 21
+#line 37
  testRunner.Then("Server status response is OK", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 22
+#line 38
  testRunner.Then("Server response type is error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 23
+#line 39
  testRunner.Then("Server response message is email already exist", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -204,7 +221,7 @@ this.FeatureBackground();
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("invalid", invalid);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Register an account with invalid email", null, tagsOfScenario, argumentsOfScenario);
-#line 26
+#line 42
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -224,22 +241,22 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 6
+#line 22
 this.FeatureBackground();
 #line hidden
-#line 27
+#line 43
  testRunner.Given(string.Format("Data with {0} email for registretion is ready", invalid), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 28
+#line 44
  testRunner.When("I send POST registration request with prepared data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 29
+#line 45
  testRunner.Then("Server status response is OK", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 30
+#line 46
  testRunner.Then("Server response type is error", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 31
+#line 47
  testRunner.Then("Server response message is tjat input email is invalid exist", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -255,7 +272,7 @@ this.FeatureBackground();
                     "login"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Login into an account with valid credentials", null, tagsOfScenario, argumentsOfScenario);
-#line 40
+#line 56
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -275,19 +292,19 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 6
+#line 22
 this.FeatureBackground();
 #line hidden
-#line 41
+#line 57
  testRunner.Given("Data for login is ready", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 42
+#line 58
  testRunner.When("I send POST request with login data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 43
+#line 59
  testRunner.Then("Server status response is OK", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 44
+#line 60
  testRunner.Then("Server response is true", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -312,7 +329,7 @@ this.FeatureBackground();
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             argumentsOfScenario.Add("company", company);
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Creating a company", null, tagsOfScenario, argumentsOfScenario);
-#line 47
+#line 63
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -332,22 +349,22 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 6
+#line 22
 this.FeatureBackground();
 #line hidden
-#line 48
+#line 64
  testRunner.Given(string.Format("Data for creating different type of {0} is ready", company), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 49
+#line 65
  testRunner.When("I send POST request with company prepared data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 50
+#line 66
  testRunner.Then("Server status response is OK", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 51
+#line 67
  testRunner.Then("Server response type is success", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 52
+#line 68
  testRunner.Then(string.Format("Server response with {0} detatils math with request data", company), ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -365,7 +382,7 @@ this.FeatureBackground();
                     "tasks"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Creating task for user", null, tagsOfScenario, argumentsOfScenario);
-#line 61
+#line 76
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -385,22 +402,22 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 6
+#line 22
 this.FeatureBackground();
 #line hidden
-#line 62
+#line 77
  testRunner.Given("Data for creating task for user is ready", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 63
+#line 78
  testRunner.When("I send POST request with prepared for creating task data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 64
+#line 79
  testRunner.Then("Server status response is OK", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 65
+#line 80
  testRunner.Then("Server response type is success", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 66
+#line 81
  testRunner.Then("Server response message inform that task was created", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -416,7 +433,7 @@ this.FeatureBackground();
                     "tasks"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Deleting user task", null, tagsOfScenario, argumentsOfScenario);
-#line 69
+#line 84
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -436,25 +453,25 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 6
+#line 22
 this.FeatureBackground();
 #line hidden
-#line 70
+#line 85
  testRunner.Given("User has task", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 71
+#line 86
  testRunner.Given("Data for deleting task user is ready", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 72
+#line 87
  testRunner.When("I send POST request with prepared for deleting task data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 73
+#line 88
  testRunner.Then("Server status response is OK", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 74
+#line 89
  testRunner.Then("Server response type is success", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 75
+#line 90
  testRunner.Then("Server response message inform that task was deleted", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }
@@ -470,7 +487,7 @@ this.FeatureBackground();
                     "search"};
             System.Collections.Specialized.OrderedDictionary argumentsOfScenario = new System.Collections.Specialized.OrderedDictionary();
             TechTalk.SpecFlow.ScenarioInfo scenarioInfo = new TechTalk.SpecFlow.ScenarioInfo("Search all information about one user by email", null, tagsOfScenario, argumentsOfScenario);
-#line 78
+#line 93
 this.ScenarioInitialize(scenarioInfo);
 #line hidden
             bool isScenarioIgnored = default(bool);
@@ -490,22 +507,22 @@ this.ScenarioInitialize(scenarioInfo);
             else
             {
                 this.ScenarioStart();
-#line 6
+#line 22
 this.FeatureBackground();
 #line hidden
-#line 79
+#line 94
  testRunner.Given("Data of existing user for magic search is ready", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
-#line 80
+#line 95
  testRunner.When("I send POST request with prepared user data", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "When ");
 #line hidden
-#line 81
+#line 96
  testRunner.Then("Server status response is 231", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 82
+#line 97
  testRunner.Then("Server response include email of user that we was looking for", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
-#line 83
+#line 98
  testRunner.Then("Server response include name of user that we was looking for", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
             }

@@ -14,9 +14,9 @@ namespace ApiPractice.Steps
     {
         RestClient client;
         RestRequest request;
-        Dictionary<string, string> userData;
+        Dictionary<string, object> userData;
         Dictionary<string, object> companyDetails;
-        Dictionary<string, string> userWithTask;
+        Dictionary<string, object> userWithTask;
         string createdTaskId;
         IRestResponse response;
 
@@ -36,7 +36,7 @@ namespace ApiPractice.Steps
             string email = "nums" + now + "@test.com";
             string name = "user" + now;
             string pass = now;
-            userData = new Dictionary<string, string>();
+            userData = new Dictionary<string, object>();
             userData.Add("name", name);
             userData.Add("email", email);
             userData.Add("password", pass);
@@ -45,10 +45,7 @@ namespace ApiPractice.Steps
         [When(@"I send POST registration request with prepared data")]
         public void WhenISendPOSTRegistrationRequestWithPreparedData()
         {
-            request = new RestRequest("tasks/rest/doregister ", Method.POST);
-            request.RequestFormat = DataFormat.Json;
-            request.AddJsonBody(userData);
-            response = client.Execute(request);
+            SendPOSTRequest("tasks/rest/doregister", userData);
         }
 
         [Then(@"Server status response is OK")]
@@ -80,7 +77,7 @@ namespace ApiPractice.Steps
             string email = "zx@z.x";
             string name = "	user";
             string pass = "123qwe";
-            userData = new Dictionary<string, string>();
+            userData = new Dictionary<string, object>();
             userData.Add("name", name);
             userData.Add("email", email);
             userData.Add("password", pass);
@@ -89,10 +86,7 @@ namespace ApiPractice.Steps
         [When(@"I send POST request with prepared data")]
         public void WhenISendPOSTRequestWithPreparedData()
         {
-            request = new RestRequest("tasks/rest/doregister ", Method.POST);
-            request.RequestFormat = DataFormat.Json;
-            request.AddJsonBody(userData);
-            response = client.Execute(request);
+            SendPOSTRequest("tasks/rest/doregister", userData);
         }
        
         [Then(@"Server response type is error")]
@@ -118,7 +112,7 @@ namespace ApiPractice.Steps
         {          
             string name = "user";
             string pass = "123qwe";
-            userData = new Dictionary<string, string>();
+            userData = new Dictionary<string, object>();
             userData.Add("name", name);
             userData.Add("email", email);
             userData.Add("password", pass);
@@ -137,7 +131,7 @@ namespace ApiPractice.Steps
         [Given(@"Data for login is ready")]
         public void GivenDataForLoginIsReady()
         {
-            userData = new Dictionary<string, string>();
+            userData = new Dictionary<string, object>();
             userData.Add("name", "BloodyMery");
             userData.Add("email", "mary@hellowin.usa");
             userData.Add("password", "123qwe");
@@ -146,10 +140,7 @@ namespace ApiPractice.Steps
         [When(@"I send POST request with login data")]
         public void WhenISendPOSTRequestWithLoginData()
         {
-            request = new RestRequest("tasks/rest/dologin ", Method.POST);
-            request.RequestFormat = DataFormat.Json;
-            request.AddJsonBody(userData);
-            response = client.Execute(request);
+            SendPOSTRequest("tasks/rest/dologin", userData);
         }
 
         [Then(@"Server response is true")]
@@ -168,7 +159,8 @@ namespace ApiPractice.Steps
             string companyName = "Ferrero " + companyType;
             List<string> companyUsers = new List<string>
             {
-                "first@test.ru"
+                "first@test.ru",
+                "mary@hellowin.usa"
             };
             companyDetails.Add("company_name", companyName);
             companyDetails.Add("company_type", companyType.Trim(new char[] { '"' }));
@@ -179,10 +171,7 @@ namespace ApiPractice.Steps
         [When(@"I send POST request with company prepared data")]
         public void WhenISendPOSTRequestWithCompanyPreparedData()
         {
-            request = new RestRequest("tasks/rest/createcompany ", Method.POST);
-            request.RequestFormat = DataFormat.Json;
-            request.AddJsonBody(companyDetails);
-            response = client.Execute(request);
+            SendPOSTRequest("tasks/rest/createcompany", companyDetails);
         }
 
         [Then(@"Server response type is success")]
@@ -200,14 +189,18 @@ namespace ApiPractice.Steps
             JObject json = JObject.Parse(temp);
             var companyList = json.Children().ToArray();
             string companyName = json["company"]["name"].ToString();
+            string firstEmployee = json["company"]["users"][0].ToString();
+            string secondEmployee = json["company"]["users"][1].ToString();
             Assert.AreEqual("Ferrero " + companyType, companyName);
+            Assert.AreEqual("first@test.ru", firstEmployee);
+            Assert.AreEqual("mary@hellowin.usa", secondEmployee);
         }
-
+                
         // Creating task for user
         [Given(@"Data for creating task for user is ready")]
         public void GivenDataForCreatingTaskForUserIsReady()
         {
-            userWithTask = new Dictionary<string, string>();
+            userWithTask = new Dictionary<string, object>();
             string task = "Building ship models";
             string descriprion = "There is new request for your legendary ship model";
             userWithTask.Add("task_title", task);
@@ -219,10 +212,7 @@ namespace ApiPractice.Steps
         [When(@"I send POST request with prepared for creating task data")]
         public void WhenISendPOSTRequestWithPreparedForCreatingTaskData()
         {
-            request = new RestRequest("tasks/rest/createtask", Method.POST);
-            request.RequestFormat = DataFormat.Json;
-            request.AddJsonBody(userWithTask);
-            response = client.Execute(request);
+            SendPOSTRequest("tasks/rest/createtask", userWithTask);
         }
 
         [Then(@"Server response message inform that task was created")]
@@ -238,17 +228,14 @@ namespace ApiPractice.Steps
         [Given(@"User has task")]
         public void GivenUserHasTask()
         {
-            userWithTask = new Dictionary<string, string>()
+            userWithTask = new Dictionary<string, object>()
             {
                 { "task_title", "Building ship models" },
                 { "task_description", "There is new request for your legendary ship model"},
                 { "email_owner", "first@test.ru"},
                 { "email_assign", "mary@hellowin.usa"}
-            };
-            request = new RestRequest("tasks/rest/createtask ", Method.POST);
-            request.RequestFormat = DataFormat.Json;
-            request.AddJsonBody(userWithTask);
-            response = client.Execute(request);
+            };            
+            SendPOSTRequest("tasks/rest/createtask ", userWithTask);
             JObject json = JObject.Parse(response.Content);
             createdTaskId = json["id_task"]?.ToString();
         }
@@ -256,7 +243,7 @@ namespace ApiPractice.Steps
         [Given(@"Data for deleting task user is ready")]
         public void GivenDataForDeletingTaskUserIsReady()
         {
-            userWithTask = new Dictionary<string, string>();
+            userWithTask = new Dictionary<string, object>();
             userWithTask.Add("email_owner", "first@test.ru");
             userWithTask.Add("task_id", createdTaskId);
         }
@@ -264,10 +251,7 @@ namespace ApiPractice.Steps
         [When(@"I send POST request with prepared for deleting task data")]
         public void WhenISendPOSTRequestWithPreparedForDeletingTaskData()
         {
-            request = new RestRequest("tasks/rest/deletetask ", Method.POST);
-            request.RequestFormat = DataFormat.Json;
-            request.AddJsonBody(userWithTask);
-            response = client.Execute(request);
+            SendPOSTRequest("tasks/rest/deletetask", userWithTask);
         }
 
         [Then(@"Server response message inform that task was deleted")]
@@ -282,7 +266,7 @@ namespace ApiPractice.Steps
         [Given(@"Data of existing user for magic search is ready")]
         public void GivenDataOfExistingUserForMagicSearchIsReady()
         {
-            userData = new Dictionary<string, string>()
+            userData = new Dictionary<string, object>()
             {
                 {"query", "mary@hellowin.usa" }
             };            
@@ -291,10 +275,7 @@ namespace ApiPractice.Steps
         [When(@"I send POST request with prepared user data")]
         public void WhenISendPOSTRequestWithPreparedUserData()
         {
-            request = new RestRequest("tasks/rest/magicsearch", Method.POST);
-            request.RequestFormat = DataFormat.Json;
-            request.AddJsonBody(userData);
-            response = client.Execute(request);
+            SendPOSTRequest("tasks/rest/magicsearch", userData);
         }
 
         [Then(@"Server status response is (.*)")]
@@ -326,33 +307,34 @@ namespace ApiPractice.Steps
         }
 
         // Hooks 
-
         [AfterScenario("successRegistration")]
         public void DeleteCreatedUser()
         {
-            Dictionary<string, string> userToDelete = new Dictionary<string, string>()
+            Dictionary<string, object> userToDelete = new Dictionary<string, object>()
             {
                 {"email", userData["email"] }
             };
-            request = new RestRequest("tasks/rest/deleteuser ", Method.POST);
-            request.RequestFormat = DataFormat.Json;
-            request.AddJsonBody(userToDelete);
-            response = client.Execute(request);
+            SendPOSTRequest("tasks/rest/deleteuser ", userToDelete);
         }
 
         [AfterScenario("createTask")]
         public void DeleteUserTask()
         {
-            Dictionary<string, string> taskToDelete = new Dictionary<string, string>()
+            Dictionary<string, object> taskToDelete = new Dictionary<string, object>()
                  {
                      { "email_owner", "mary@hellowin.usa" },
                      { "task_id", createdTaskId.Trim() }
                  };
-            request = new RestRequest("tasks/rest/deletetask ", Method.POST);
-            request.RequestFormat = DataFormat.Json;
-            request.AddJsonBody(taskToDelete);
-            response = client.Execute(request);
+            SendPOSTRequest("tasks/rest/deletetask ", taskToDelete);
             createdTaskId = "";
+        }
+
+        public void SendPOSTRequest(string link, Dictionary<string, object> requestBody)
+        {
+            request = new RestRequest(link, Method.POST);
+            request.RequestFormat = DataFormat.Json;
+            request.AddJsonBody(requestBody);
+            response = client.Execute(request);
         }
     }
 }
