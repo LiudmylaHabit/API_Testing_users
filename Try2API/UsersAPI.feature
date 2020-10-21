@@ -1,7 +1,23 @@
 ﻿Feature: UsersAPI
-	In order to create tasks 
+	In order to create a company in users system
 	As a user
-	I want to register account on users system
+	I want to register account on the website
+
+	In order to complete the assigned tasks
+	As a user
+	I want to be able to login into the system
+
+	To unite my employees
+	As a user
+	I want to create a company with employees
+
+	In order to organize work
+	As a user 
+	I want to be able to create tasks
+
+	In order to avoid duplicates and mistakes
+	As a user
+	I want to be able to delete tasks created by me
 
 Background:
 	Given REST-client for request is created
@@ -23,7 +39,7 @@ Scenario: Register an account with existing email
 	Then Server response message is email already exist
 
 @negativeRegistration
-Scenario: Register an account with invalid email
+Scenario Outline: Register an account with invalid email
 	Given Data with <invalid> email for registretion is ready
 	When I send POST registration request with prepared data
 	Then Server status response is OK
@@ -44,13 +60,12 @@ Scenario: Login into an account with valid credentials
 	Then Server response is true
 
 @companyCreating
-Scenario: Creating a company 
+Scenario Outline: Creating a company 
 	Given Data for creating different type of <company> is ready
 	When I send POST request with company prepared data
 	Then Server status response is OK
 	Then Server response type is success
 	Then Server response with <company> detatils math with request data
-
 	Examples:
 		| company |
 		| "ИП"    |
